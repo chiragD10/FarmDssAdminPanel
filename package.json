@@ -58,5 +58,12 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "craco.config.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiragD10/FarmDssAdminPanel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chiragD10/FarmDssAdminPanel/issues"
+  }
 }

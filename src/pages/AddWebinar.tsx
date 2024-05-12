@@ -514,7 +514,7 @@ const WebinarPage: React.FC = () => {
                 )}
                 { showShare && <Share setShowShare={setShowShare} shareLink={shareLink}/> }
                 { editModalVisible && <EditModal creators={creators} webinarId={webId} webinar={web} editModalVisible={editModalVisible} setEditModalVisible={setEditModalVisible}></EditModal>}
-                <Pagination entries={webinars.length} ataTime={itemsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}></Pagination>
+                <Pagination entries={filteredWebinars.length} ataTime={itemsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}></Pagination>
             </div>
         </div>
     );

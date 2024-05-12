@@ -8,10 +8,12 @@ const Farmers: React.FC = () => {
 
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
-    const [users, setUsers] = useState<any>([])
+    const [users, setUsers] = useState<any[]>([])
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    
+    const [startDate,setStartDate] = useState('');;
+    const [endDate,setEndDate] = useState('');
+
     const token = localStorage.getItem('authToken');
     const base_url = process.env.REACT_APP_API_URI;
 
@@ -45,7 +47,32 @@ const Farmers: React.FC = () => {
         const exportType = exportFromJSON.types.csv
         exportFromJSON({data:f, fileName:filename, exportType})
     };
-
+    const handleStartDate = (event: any) => {
+        setStartDate(event.target.value);
+    };
+    const handleEndDate = (event: any) => {
+        setEndDate(event.target.value);
+    };
+    const saveDates = () => {
+        const startDate1=new Date(startDate);
+        console.log("Start Date:", startDate1);
+        const endDate1=new Date(endDate);
+        console.log("End Date:", endDate1);
+        const today = new Date();
+        console.log("today Date:", today);
+        console.log(filteredusers);
+    };
+    const filteredusers = users.filter((user) => {
+        if(!startDate || !endDate)return true;
+        const usercreated = new Date(user.created_at);
+        const userlastseen = new Date(user.last_seen)
+        const startDate1=new Date(startDate);
+        const endDate1=new Date(endDate);
+        if (usercreated>startDate1 && usercreated<endDate1) {
+            return true;
+        }
+        return false;
+    })
   return (
     <div className='container mx-auto p-4'>
         <div className='text-xcodegold font-poppins font-semibold'>All Users</div>
@@ -64,6 +91,8 @@ const Farmers: React.FC = () => {
                 type="datetime-local"
                 placeholder="Publish Date"
                 name="publish_date"
+                // value={startDate}
+                onChange={handleStartDate}
                 required
             />
             <input
@@ -71,11 +100,14 @@ const Farmers: React.FC = () => {
                 type="datetime-local"
                 placeholder="Publish Date"
                 name="publish_date"
+                // value={endDate}
+                onChange={handleEndDate}
                 required
             />
             <button
                 className="px-4 py-2 bg-xcodegold text-white rounded"
                 style={{ top: '10px', right: '10px' }}
+                onClick={saveDates}
             >
                 Add Filter
             </button>
@@ -142,7 +174,7 @@ const Farmers: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.isArray(users) && users.slice((currentPage - 1) * itemsPerPage, Math.min(currentPage * itemsPerPage , users.length)).map((user) => (
+                    {Array.isArray(filteredusers) && filteredusers.slice((currentPage - 1) * itemsPerPage, Math.min(currentPage * itemsPerPage , filteredusers.length)).map((user) => (
                         <tr key={user.id}>
                             <td className="border px-4 py-2 text-xcodebblue font-poppins font-medium">{user.id}</td>
                             <td className="border px-4 py-2 text-xcodebblue font-poppins font-medium">{user.username}</td>
@@ -168,7 +200,7 @@ const Farmers: React.FC = () => {
                 </tbody>
             </table>
         </div>
-        <Pagination entries={users.length} ataTime={itemsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}></Pagination>
+        <Pagination entries={filteredusers.length} ataTime={itemsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}></Pagination>
         
     </div>
   );
